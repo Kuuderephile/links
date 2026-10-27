@@ -106,47 +106,12 @@
     <div class="mt-8 text-center text-xs text-slate-600">
         Усі права захищені &bull; Безпечний шлюз перенаправлення
     </div>
-
-
-    <!-- ==========================================
-         ПАРАМЕТРИ РОЗРОБНИКА (ВИДАЛІТЬ ЦЕЙ БЛОК ПЕРЕД ЗАВАНТАЖЕННЯМ НА ХОСТИНГ)
-         ========================================== -->
-    <div id="developer-tools" class="mt-12 w-full max-w-md bg-slate-900/30 border border-amber-500/20 rounded-3xl p-6 backdrop-blur-md">
-        <div class="flex items-center gap-2 mb-4">
-            <span class="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider">Панель розробника (Кодувальник URL)</h3>
-        </div>
-        <p class="text-xs text-slate-400 mb-4">Ця панель допоможе вам закодувати посилання у формат Base64, щоб вставити їх у скрипт `REDIRECTS` нижче.</p>
-        
-        <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Посилання (URL):</label>
-                <input type="text" id="dev-url-input" placeholder="https://example.com/manga/123" 
-                       class="w-full rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white placeholder:text-slate-700">
-            </div>
-            <div>
-                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">ID (для хешу):</label>
-                <input type="text" id="dev-id-input" placeholder="my-manga" 
-                       class="w-full rounded-xl bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-white placeholder:text-slate-700">
-            </div>
-            <button id="dev-encode-btn" class="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs py-2 px-4 rounded-xl transition-colors">
-                Закодувати посилання
-            </button>
-            
-            <div id="dev-result-box" class="hidden bg-slate-950 p-3 rounded-xl border border-slate-800">
-                <p class="text-[10px] uppercase font-bold text-emerald-400 mb-2">Готово! Скопіюйте цей рядок:</p>
-                <pre id="dev-output" class="text-[11px] font-mono text-slate-300 break-all select-all cursor-pointer p-1 bg-slate-900 rounded border border-slate-800/50"></pre>
-            </div>
-        </div>
-    </div>
     <script>
-        // ==========================================
-        // НАЛАШТУВАННЯ: Ваша база даних ЗАШИФРОВАНИХ посилань (ID -> Base64 URL)
-        // Ви можете генерувати їх за допомогою панелі розробника знизу!
-        // ==========================================
         const REDIRECTS = {
+            "start_1_v": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZCaT1vcB3yHzlL8wwcA8nlS6trIokEzvaZ8wnNlW9xe0eqLuU2mvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             // HHHHHHHHHHHHHHHHHHHHHHH_SLIME
             // HHHHHHHHHHHHHHHHHHHHHHH_SLIME
+            "slime_0_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZCqH3xG2nsZ0fiFpQ5ymfF5gyX9yjZ4unM6zP5hfN6qtB9xZ3vmvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             "slime_1_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC8wMTVlNTBkMC1lMWQzLTQ2ODAtYTQ3MS0wYjIxZGNmNTNjMjEvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             "slime_2_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC8yM2I0NWU2Yy03MjkxLTQyZmQtOTAyMS1hOWNjNTczZDMyZmYvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             "slime_3_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC9mNjRmMzZmYi0zYzllLTQzMGEtOTE3MC1hZDg4OTZjZmQ1ZGIvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
@@ -195,6 +160,7 @@
             "slime_144_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC9mZTdkOTVhMC00YTZjLTRmOTktYjEwNS04ZmE5MWQxOWU5NWQvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             "slime_145_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC85ODljOTQ5NC1lNmQyLTQ0NDQtODhmMS1mMTc5MWFlOGM0MTUvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             "slime_146_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC82MTFmOWM2My1iYjlhLTRmMGEtYjI4ZS1kMjNiY2Y0YTU2NjkvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
+            "slime_147_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC80MDczYTA2YS1kZjM3LTQ4MDQtOGFlMy04ZjcyODVlZWJlZjAvMGQ0NWE1OTktYjIwNi00MjgzLTkyMTQtODM0ZjBhNzhmNzYy",
             // CCCCCCCCCCCCCCCCCCCCCCC_SLIME
             "slime_1_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMS8xLw==",
             "slime_2_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMi8xLw==",
@@ -242,10 +208,12 @@
             "slime_144_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMTQ0LzEv",
             "slime_145_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMTQ1LzEv",
             "slime_146_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMTQ2LzEv",
+            "slime_147_c": "aHR0cHM6Ly9jdWJhcmkubW9lL3JlYWQvZ2lzdC9jbUYzTDB0MWRXUmxjbVZ3YUdsc1pTOXRZVzVuWVM5eVpXWnpMMmhsWVdSekwyMWhhVzR2VTJ4cGJXVXVhbk52YmcvMTQ3LzEv",
             // MMMMMMMMMMMMMMMMMMMMMMM_SLIME
             "slime_144_m": "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzRzZzMxcmo3N3IyNXZmZg==",
             // HHHHHHHHHHHHTTTTTTTTTTT_SLIME
             "slime_144_ht": "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2x5bXFsdDZ1eGw4NmU1Zg==",
+            "slime_147_ht": "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzdjanBnbWpqOHNndmM5ei9TbGltZV9jaF8xNDcuaHRtbC9maWxl",
             // HHHHHHHHHHHHHHHHHHHHHHH_JM
             "jm_7_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC84ZDliOTRmZi01Mzg5LTRmZGEtOTRhYy1iMTcxMjVhNTRhNjYvMGZmZGQzNmMtOGEwMy00NjNhLWIwMzEtNGIzMmNjNjBhZGRj",
             "jm_8_h": "aHR0cHM6Ly9ob25leS1tYW5nYS5jb20udWEvcmVhZC9iN2Y5MzJiYS1iZjM1LTQxMjctYjM3OC04MTE2ZDdjY2EzYzcvMGZmZGQzNmMtOGEwMy00NjNhLWIwMzEtNGIzMmNjNjBhZGRj",
@@ -357,6 +325,7 @@
 
             "mra_145_slim": "aHR0cHM6Ly9tYW5ncmEuYXBwL3JlYWQvcHJvLW1veXUtcmVpbmthcm5hdHNpeXUtdS1zbGF5bS0wYWRiYjQvMTQ1P3ZvbHVtZT0zMiZwYWdlPTE=",
             "mra_146_slim": "aHR0cHM6Ly9tYW5ncmEuYXBwL3JlYWQvcHJvLW1veXUtcmVpbmthcm5hdHNpeXUtdS1zbGF5bS0wYWRiYjQvMTQ2P3Y9MzI=",
+            "mra_147_slim": "aHR0cHM6Ly9tYW5ncmEuYXBwL3JlYWQvcHJvLW1veXUtcmVpbmthcm5hdHNpeXUtdS1zbGF5bS0wYWRiYjQvMTQ3P3Y9MzM=",
             // RAAAAAAAAAAAAAAAAAAAAA_JM
             "mra_39_5_jm": "aHR0cHM6Ly9tYW5ncmEuYXBwL3JlYWQvai1tLWR6aGVtLWYzNzNiOC8zOS41",
             "mra_40_jm": "aHR0cHM6Ly9tYW5ncmEuYXBwL3JlYWQvai1tLWR6aGVtLWYzNzNiOC80MA==",
@@ -366,8 +335,8 @@
             "html_42_jm": "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlLzFvaXB5cDd2YjY3dGhydS8lMjVEMCUyNTk0JTI1RDAlMjVCNiUyNUQwJTI1OTUlMjVEMCUyNUJDXzQyLmh0bWwvZmlsZQ==",
 
             
-            // Не чипати
-            "end": "aHR0cHM6Ly9leGFtcGxlLmNvbS9zaG9fdG9iaV90cmViYV90dXQ/"
+            // Кінцев
+            "end": "aHR0cHM6Ly9leGFyT0jxA6lzI4eaH1zaG9fdG9iaV90cmViYV90dXQ/"
         };
 
     </script>
